@@ -1,5 +1,6 @@
 import json
 
+
 auth = api_key
 evc_location = [] #example_= -33.8670522,151.1957362
 radius = 500 #
