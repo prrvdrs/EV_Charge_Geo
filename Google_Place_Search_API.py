@@ -1,7 +1,7 @@
 
 ############################################################
 ##                                                        ##
-## Atttention: Generating Costs on Google Cloud Platforme ##
+## Attention: Generating Costs on Google Cloud Platforme ##
 ##                                                        ##
 ############################################################
 
