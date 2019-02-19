@@ -2,7 +2,7 @@
 
 ## Getting Started
 
-### Data
+### Data Source
 
 #### Electric car charge points
 * https://www.esb.ie/our-businesses/ecars/charge-point-map
@@ -10,3 +10,5 @@
 
 #### Places of interest - Google Places API (Nearby Search requests)
 * https://developers.google.com/places/web-service/search
+
+### Data Extraction
