@@ -1,3 +1,11 @@
+import geopy.distance
+
+coords_1 = (52.802547,-6.7371517)
+coords_2 = (52.801581,-6.736986)
+
+print (geopy.distance.vincenty(coords_1, coords_2).km)
+
+'''
 import csv
 
 def main():
@@ -10,3 +18,4 @@ def main():
 
 if __name__ == main():
     main()
+'''
