@@ -10,5 +10,4 @@
 
 #### Places of interest - Google Places API (Nearby Search requests)
 * https://developers.google.com/places/web-service/search
-
-### Data Extraction
+* https://developers.google.com/places/web-service/supported_types
