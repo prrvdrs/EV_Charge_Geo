@@ -17,12 +17,13 @@ def main():
         reader = csv.reader(coordinates)
         for i in reader:
             c = ''.join(i)
+            s = c.replace(',','')
             url = f"https://maps.googleapis.com/maps/api/place/nearbysearch/json?location={c}&radius={radius}&key={searchApi}"
             print(url)
             try:
                 response = requests.get(url)
                 response.raise_for_status()  # ensure we notice bad responses
-                file = open(f"data/API_Response/raw_nearby_500_{i}", "w")
+                file = open(f"data/API_Response/raw_nearby_500_{s}.json", "w")
                 file.write(response.text)
             except:
                 continue
