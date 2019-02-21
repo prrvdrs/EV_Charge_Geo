@@ -6,7 +6,7 @@ from pprint import pprint
 
 csvfile = open('data/locationOfInterests.csv', 'w')
 writer = csv.writer(csvfile, delimiter=',',lineterminator='\n',quotechar = '"')
-writer.writerow(["coordinates_cp","coordinates_pi","distance_vincenty","id","name", "place_id","scope", "vicinity",
+writer.writerow(["coordinates_cp","coordinates_pi","distance_vincenty","id","name", "place_id", "rating", "user_rating","scope", "vicinity",
                  "type_raw", "type_one", "type_two", "type_three"])
 
 with open('raw_nearby_500_52.801581-6.736986.json', 'r') as f:
@@ -21,9 +21,24 @@ with open('raw_nearby_500_52.801581-6.736986.json', 'r') as f:
         id = i['id']
         name = i['name']
         placeId = i['place_id']
+
+        ''' Extract Rating '''
+        if 'rating' not in i:
+            rating = ''
+        else:
+            rating = i['rating']
+
+        ''' # of User Ratings '''
+        if 'user_ratings_total' not in i:
+            userRating = ''
+        else:
+            userRating = i['user_ratings_total']
+
         scope = i['scope']
         vicinity = i['vicinity']
         typeRaw = i['types']
+
+        ''' Google Classification 1 '''
         googlePlacesTypeOne = ["administrative_area_level_1","administrative_area_level_2",
                                "administrative_area_level_3","administrative_area_level_4",
                                "administrative_area_level_5","colloquial_area","country",
@@ -33,6 +48,9 @@ with open('raw_nearby_500_52.801581-6.736986.json', 'r') as f:
                                "postal_code_suffix","postal_town","premise","room","route","street_address",
                                "street_number","sublocality","sublocality_level_4","sublocality_level_5",
                                "sublocality_level_3","sublocality_level_2","sublocality_level_1","subpremise"]
+
+        ''' Google Classification 2'''
+
         googlePlacesTypeTwo = ["accounting","airport","amusement_park","aquarium","art_gallery","atm","bakery","bank",
                                "bar","beauty_salon","bicycle_store","book_store","bowling_alley","bus_station","cafe",
                                "campground","car_dealer","car_rental","car_repair","car_wash","casino","cemetery",
@@ -57,5 +75,5 @@ with open('raw_nearby_500_52.801581-6.736986.json', 'r') as f:
             typeTwo.append(q)
         typeThree = "placeholder"
         #print(i['id'], i['name'], i['scope'], i['types'])
-        writer.writerow([coordinatesCP, coordinatesPI, distanceVincenty, id, name, placeId, scope, vicinity, typeRaw,
+        writer.writerow([coordinatesCP, coordinatesPI, distanceVincenty, id, name, placeId, rating, userRating, scope, vicinity, typeRaw,
                          typeOne, typeTwo, typeThree])
