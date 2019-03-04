@@ -13,21 +13,61 @@ import csv
 def main():
     searchApi = get_api_key()
     radius = "500"
+    c = "54.857101,-6.308798"
+    s = "54.857101-6.308798"
+    '''
     with open('data/coordinates_EVCP.csv') as coordinates:
         reader = csv.reader(coordinates)
         for i in reader:
             c = ''.join(i)
             s = c.replace(',','')
-            url = f"https://maps.googleapis.com/maps/api/place/nearbysearch/json?location={c}&radius={radius}&key={searchApi}"
-            print(url)
-            try:
-                response = requests.get(url)
-                response.raise_for_status()  # ensure we notice bad responses
-                file = open(f"data/API_Response/raw_nearby_500_{s}.json", "w")
-                file.write(response.text)
-            except:
-                continue
-            time.sleep(1)  # limit requests per second.
+    '''
+    url = f"https://maps.googleapis.com/maps/api/place/nearbysearch/json?location={c}&radius={radius}&key={searchApi}"
+    print(url)
+
+    response = requests.get(url)
+    res = response.json()
+    file = open(f"data/API_Response/raw_nearby_500_{s}_1.json", "w", encoding="utf-8")
+    file.write(response.text)
+    if "next_page_token" not in res:
+        pagetoken = ''
+    else:
+        pagetoken = res["next_page_token"]
+    print(pagetoken)
+
+    '''
+    if pagetoken is not None:
+        time.sleep(5)
+        url2 = f"https://maps.googleapis.com/maps/api/place/nearbysearch/json?&pagetoken={pagetoken}&key={searchApi}"
+        time.sleep(5)
+        print(url2)
+        response2 = requests.get(url2)
+        response2.raise_for_status()  # ensure we notice bad responses
+        file2 = open(f"data/API_Response/raw_nearby_500_{s}_2.json", "w")
+        file2.write(response2.text)
+        res2 = json.loads(response2.text)
+        pagetoken2 = res2.get("next_page_token", None)
+
+        if pagetoken2 is not None:
+            time.sleep(5)
+            url3 = f"https://maps.googleapis.com/maps/api/place/nearbysearch/json?&pagetoken={pagetoken2}&key={searchApi}"
+            print(url3)
+            time.sleep(5)
+            response3 = requests.get(url3)
+            response3.raise_for_status()  # ensure we notice bad responses
+            file3 = open(f"data/API_Response/raw_nearby_500_{s}_3.json", "w")
+            file3.write(response3.text)
+            res3 = json.loads(response3.text)
+            #pagetoken3 = res3.get("next_page_token", None)
+        else:
+            print("No third page")
+    else:
+        print("No second page")
+    '''
+    '''except:
+        #continue
+        print("issue")'''
+    time.sleep(5)  # limit requests per second.
 
 def get_api_key():
     ''' Gets API key from a JSON file and returns it. '''

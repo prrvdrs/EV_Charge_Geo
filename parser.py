@@ -3,6 +3,7 @@ import geopy.distance
 import csv
 import os
 import re
+import time
 from pprint import pprint
 import matplotlib.pyplot as plt
 import numpy as np
@@ -12,7 +13,7 @@ from sklearn.cluster import KMeans
 Create new file that will contain the parsed data
 '''
 
-csvfile = open('data/places_raw.csv', 'w')
+csvfile = open('data/coordinates_PoI.csv', 'w')
 writer = csv.writer(csvfile, delimiter=',',lineterminator='\n',quotechar = '"')
 writer.writerow(["coordinates_cp","coordinates_pi","distance_vincenty","id","name", "place_id", "rating", "user_rating","scope", "vicinity",
                  "type_raw", "type_one", "type_two",
@@ -57,7 +58,11 @@ for filename in os.listdir(directory):
                     userRating = i['user_ratings_total']
 
                 scope = i['scope']
-                vicinity = i['vicinity']
+                #vicinity = i['vicinity']
+                if 'vicinity' not in i:
+                    vicinity = ''
+                else:
+                    vicinity = i['vicinity']
                 typeRaw = i['types']
 
                 googlePlacesType =    ["administrative_area_level_1", "administrative_area_level_2",
@@ -144,4 +149,4 @@ for filename in os.listdir(directory):
                                  scope, vicinity, typeRaw, typeOne, typeTwo, labeling])
     else:
         continue
-
+    time.sleep(1)  # limit requests per second.
