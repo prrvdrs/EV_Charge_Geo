@@ -22,9 +22,9 @@ def main():
             c = ''.join(i)
             s = c.replace(',','')
     '''
+
     url = f"https://maps.googleapis.com/maps/api/place/nearbysearch/json?location={c}&radius={radius}&key={searchApi}"
     print(url)
-
     response = requests.get(url)
     res = response.json()
     file = open(f"data/API_Response/raw_nearby_500_{s}_1.json", "w", encoding="utf-8")
@@ -35,35 +35,47 @@ def main():
         pagetoken = res["next_page_token"]
     print(pagetoken)
 
-    '''
     if pagetoken is not None:
         time.sleep(5)
         url2 = f"https://maps.googleapis.com/maps/api/place/nearbysearch/json?&pagetoken={pagetoken}&key={searchApi}"
-        time.sleep(5)
         print(url2)
         response2 = requests.get(url2)
-        response2.raise_for_status()  # ensure we notice bad responses
+        res2 = response2.json()
+        file2 = open(f"data/API_Response/raw_nearby_500_{s}_2.json", "w", encoding="utf-8")
+        file2.write(response2.text)
+        if "next_page_token" not in res2:
+            pagetoken2 = ''
+        else:
+            pagetoken2 = res2["next_page_token"]
+        print(pagetoken2)
+
+        '''
         file2 = open(f"data/API_Response/raw_nearby_500_{s}_2.json", "w")
         file2.write(response2.text)
         res2 = json.loads(response2.text)
         pagetoken2 = res2.get("next_page_token", None)
-
+        '''
         if pagetoken2 is not None:
             time.sleep(5)
             url3 = f"https://maps.googleapis.com/maps/api/place/nearbysearch/json?&pagetoken={pagetoken2}&key={searchApi}"
             print(url3)
-            time.sleep(5)
+            response3 = requests.get(url3)
+            #res3 = response3.json()
+            file3 = open(f"data/API_Response/raw_nearby_500_{s}_3.json", "w", encoding="utf-8")
+            file3.write(response3.text)
+            '''
             response3 = requests.get(url3)
             response3.raise_for_status()  # ensure we notice bad responses
             file3 = open(f"data/API_Response/raw_nearby_500_{s}_3.json", "w")
             file3.write(response3.text)
             res3 = json.loads(response3.text)
             #pagetoken3 = res3.get("next_page_token", None)
+            '''
         else:
             print("No third page")
     else:
         print("No second page")
-    '''
+
     '''except:
         #continue
         print("issue")'''
