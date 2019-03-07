@@ -33,7 +33,7 @@ for filename in os.listdir(directory):
     if filename.endswith(".json"):
         #f = open(filename)
         print(os.path.join(directory, filename))
-        with open(os.path.join(directory, filename)) as f:
+        with open(os.path.join(directory, filename), errors= 'ignore') as f:
             data = json.load(f)
             #pprint(data['results'])
             for i in data['results']:
