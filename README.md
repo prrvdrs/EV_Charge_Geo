@@ -15,9 +15,10 @@
 | charge point type | StandardType2, CHAdeMO, CCS, FastAC                                                         |
 | status            | OOS (out of service), OOC (out of contact), Part (partially occupied), Occ (fully occupied) |
 
-* https://www.esb.ie/our-businesses/ecars/how-to-charge-your-ecar
-* Note- on a fast multi-standard charger you can only use one of the DC connectors (CHAdeMO and CCS) at a time, however it is possible for the DC connector and fast AC connector to be used at the same time
 
+![alt text](figures/EVCP_Layout.png)
+
+Note: On a fast multi-standard charger you can only use one of the DC connectors (CHAdeMO and CCS) at a time, however it is possible for the DC connector and fast AC connector to be used at the same time (Source:[ESB](https://www.esb.ie/our-businesses/ecars/how-to-charge-your-ecar))
 
 
 #### Places of interest - Google Places API (Nearby Search requests)
