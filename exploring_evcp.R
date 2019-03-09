@@ -9,5 +9,6 @@ head(data)
 
 # Randomly selected location on a single day:
 test <- data %>%
-        filter(ID == 'CP:CBDG2'| Date == '20181101')
+        filter(ID == 'CP:C5HD3'& Date == '20181102')
 head(test)
+test
