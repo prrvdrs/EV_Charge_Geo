@@ -6,7 +6,7 @@ data <- read.csv("C:/Users/pierr/Documents/Projects/EV_Charge_Geo/data/data_poi.
 data <- data.frame(data)
 head(data)
 
-# Drop the last column 'typ'
+# Drop the last column 'type'
 test <- select (data,-c(type))
 head(test)
 
