@@ -16,7 +16,7 @@
 | status            | OOS (out of service), OOC (out of contact), Part (partially occupied), Occ (fully occupied) |
 
 
-![alt text](figures/EVCP_Layout.png)
+![alt text](https://github.com/prrvdrs/evcp-poi/figures/EVCP_Layout.png)
 
 Note: On a fast multi-standard charger you can only use one of the DC connectors (CHAdeMO and CCS) at a time, however it is possible for the DC connector and fast AC connector to be used at the same time (Source:[ESB](https://www.esb.ie/our-businesses/ecars/how-to-charge-your-ecar))
 
