@@ -1,6 +1,7 @@
 
 library(dplyr)
 
+# You will need to edit the path of the document location
 data <- read.csv("C:/Users/pierr/Documents/Projects/EV_Charge_Geo/data/data_poi.csv", header= TRUE, sep = ",")
 data <- data.frame(data)
 head(data)
