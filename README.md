@@ -31,3 +31,23 @@ Note: On a fast multi-standard charger you can only use one of the DC connectors
 
 #### POI
 
+| variables         | description                                                                                 |
+|-------------------|---------------------------------------------------------------------------------------------|
+| coordinates_cp    | Coordinates Charging Point                                                                  |
+| coordinates_pi    | Coordinates Point of Interest                                                               |
+| distance_vincenty | [Vincenty Distance](https://en.wikipedia.org/wiki/Vincenty%27s_formulae)                    |
+| id                | [Google Places ID](https://developers.google.com/places/place-id)                           |
+| name              |  |
+| place_id          |  |
+| rating            | rating                                                                                      |
+| user_rating       | # of submitted ratings                                                                      |
+| scope             |  |
+| vicinity          |  |
+| type_raw          |  |
+| type_one          |  |
+| type_two          |  |
+| type              |  |
+
+## Transformation
+
+
