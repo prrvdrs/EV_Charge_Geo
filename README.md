@@ -45,9 +45,10 @@ Note: On a fast multi-standard charger you can only use one of the DC connectors
 | user_rating       | # of submitted ratings                                                                      |
 | scope             |  |
 | vicinity          |  |
-| type_raw          |  |
-| type_one          |  |
-| type_two          |  |
-| type              |  |
+| type_raw          | List - [All place types](https://developers.google.com/places/supported_types)|
+| type_one          | List - [Place Type 1](https://developers.google.com/places/supported_types#table2) |
+| type_two          | List - [Place Type 2](https://developers.google.com/places/supported_types#table2) |
+| type              | List - Matching (O/1)|
+
 
 ## Transformation

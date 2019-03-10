@@ -10,7 +10,7 @@ data <- data.frame(data)
 
 # Coordinates have the wrong format, rearranging the coorinates column
 data$Coordinates <- as.factor(paste(data$Longitude,',',data$Latitude))
-
+head(data)
 # Test: Randomly selected location on a single day for a fast multi-standard charger
 test <- data %>%
         filter(ID == 'CP:C5HD3'& Date == '20181102')
