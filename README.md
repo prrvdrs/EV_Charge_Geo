@@ -1,4 +1,4 @@
-# Electric car charge points & Places of interest
+# Electric Vehicle Charge oints & Places of Interest
 
 ## Getting Started
 
@@ -19,6 +19,7 @@
 |-------------------|---------------------------------------------------------------------------------------------|
 | date              | yyyymmdd                                                                                    |
 | time              | hhmm (Snapshot taken every 5 minutes)                                                       |
+| id                |                                                                                             |
 | type              | StandardType2, CHAdeMO, CCS, FastAC                                                         |
 | status            | OOS (out of service), OOC (out of contact), Part (partially occupied), Occ (fully occupied) |
 | coordinates       |                                                                                     |
