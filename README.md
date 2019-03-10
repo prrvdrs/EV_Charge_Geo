@@ -1,4 +1,4 @@
-# Electric Vehicle Charge oints & Places of Interest
+# Electric Vehicle Charge Points & Places of Interest
 
 ## Getting Started
 
