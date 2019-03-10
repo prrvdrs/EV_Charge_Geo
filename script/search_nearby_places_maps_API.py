@@ -13,11 +13,7 @@ import csv
 def main():
     searchApi = get_api_key()
     radius = "500"
-    '''
-    c = "54.857101,-6.308798"
-    s = "54.857101-6.308798"
-    '''
-    with open('data/coordinates_EVCP.csv') as coordinates:
+    with open('data/stage_evcp.csv') as coordinates:
         reader = csv.reader(coordinates)
         for i in reader:
             c = ''.join(i)
@@ -33,7 +29,6 @@ def main():
                     pagetoken = ''
                 else:
                     pagetoken = res["next_page_token"]
-                #print(pagetoken)
                 if pagetoken is not None:
                     time.sleep(5)
                     url2 = f"https://maps.googleapis.com/maps/api/place/nearbysearch/json?&pagetoken={pagetoken}&key={searchApi}"
@@ -46,13 +41,6 @@ def main():
                         pagetoken2 = ''
                     else:
                         pagetoken2 = res2["next_page_token"]
-                    #print(pagetoken2)
-                    '''
-                    file2 = open(f"data/API_Response/raw_nearby_500_{s}_2.json", "w")
-                    file2.write(response2.text)
-                    res2 = json.loads(response2.text)
-                    pagetoken2 = res2.get("next_page_token", None)
-                    '''
                     if pagetoken2 is not None:
                         time.sleep(5)
                         url3 = f"https://maps.googleapis.com/maps/api/place/nearbysearch/json?&pagetoken={pagetoken2}&key={searchApi}"
@@ -61,19 +49,10 @@ def main():
                         #res3 = response3.json()
                         file3 = open(f"data/API_Response/raw_nearby_500_{s}_3.json", "w", encoding="utf-8")
                         file3.write(response3.text)
-                        '''
-                        response3 = requests.get(url3)
-                        response3.raise_for_status()  # ensure we notice bad responses
-                        file3 = open(f"data/API_Response/raw_nearby_500_{s}_3.json", "w")
-                        file3.write(response3.text)
-                        res3 = json.loads(response3.text)
-                        #pagetoken3 = res3.get("next_page_token", None)
-                        '''
                     else:
                         print("No third page")
                 else:
                     print("No second page")
-
             except:
                 continue
             time.sleep(2)  # limit requests per second.

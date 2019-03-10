@@ -4,38 +4,24 @@ import csv
 import os
 import re
 import time
-from pprint import pprint
-import matplotlib.pyplot as plt
-import numpy as np
-from sklearn.cluster import KMeans
 
 '''
 Create new file that will contain the parsed data
 '''
 
-csvfile = open('data/coordinates_PoI.csv', 'w')
+csvfile = open('data/data_poi.csv', 'w')
 writer = csv.writer(csvfile, delimiter=',',lineterminator='\n',quotechar = '"')
 writer.writerow(["coordinates_cp","coordinates_pi","distance_vincenty","id","name", "place_id", "rating", "user_rating","scope", "vicinity",
                  "type_raw", "type_one", "type_two",
                  "type"])
 
-'''
-Loop folder with json files
-
-Source:
-- http://carrefax.com/new-blog/2017/1/16/draft
-- https://stackoverflow.com/questions/10377998/how-can-i-iterate-over-files-in-a-given-directory/30255302
-
-'''
 directory = 'C:/Users/pierr/Documents/Projects/EV_Charge_Geo/data/API_Response'
 
 for filename in os.listdir(directory):
     if filename.endswith(".json"):
-        #f = open(filename)
         print(os.path.join(directory, filename))
         with open(os.path.join(directory, filename), errors= 'ignore') as f:
             data = json.load(f)
-            #pprint(data['results'])
             for i in data['results']:
                 filenameStage = re.search('(\d{1,2}\.\d+\-\d{1,2}\.\d+)', filename)
                 coordinatesCP = re.sub('-', ',-', filenameStage.group(0))
@@ -44,21 +30,17 @@ for filename in os.listdir(directory):
                 id = i['id']
                 name = i['name']
                 placeId = i['place_id']
-
                 ''' Extract Rating '''
                 if 'rating' not in i:
                     rating = ''
                 else:
                     rating = i['rating']
-
                 ''' # of User Ratings '''
                 if 'user_ratings_total' not in i:
                     userRating = ''
                 else:
                     userRating = i['user_ratings_total']
-
                 scope = i['scope']
-                #vicinity = i['vicinity']
                 if 'vicinity' not in i:
                     vicinity = ''
                 else:
@@ -123,9 +105,6 @@ for filename in os.listdir(directory):
                                        "shopping_mall","spa","stadium","storage","store","subway_station","supermarket",
                                        "synagogue","taxi_stand","train_station","transit_station","travel_agency",
                                        "veterinary_care","zoo"]
-                #googlePlacesTypeThree = []
-
-
                 typeOne = []
                 for p in set(typeRaw).intersection(set(googlePlacesTypeOne)):
                     typeOne.append(p)
@@ -133,8 +112,6 @@ for filename in os.listdir(directory):
                 for q in set(typeRaw).intersection(set(googlePlacesTypeTwo)):
                     typeTwo.append(q)
                 typeThree = "placeholder"
-
-
                 labeling =[]
                 for g in set(googlePlacesType):
                     for h in set(typeRaw):
@@ -144,9 +121,8 @@ for filename in os.listdir(directory):
                         else:
                             x = 0
                     labeling.append(x)
-
                 writer.writerow([coordinatesCP, coordinatesPI, distanceVincenty, id, name, placeId, rating, userRating,
                                  scope, vicinity, typeRaw, typeOne, typeTwo, labeling])
     else:
         continue
-    time.sleep(1)  # limit requests per second.
+    time.sleep(1)
