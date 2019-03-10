@@ -14,9 +14,8 @@
 4. Create Credentials > API Key
 5. Store API Key within script/auth_example.json
 6. Run search_nearby_places_maps_API.py ([documentation](https://developers.google.com/places/web-service/search))
-
-** 20 responses per request
-** Up to 60 total responses (using next_page_token)
+* 20 responses per request
+* Up to 60 total responses (using next_page_token)
 
 ## Data
 
@@ -43,6 +42,7 @@ Note: On a fast multi-standard charger you can only use one of the DC connectors
 #### POI
 
 ![graph](https://raw.githubusercontent.com/prrvdrs/evcp-poi/master/figures/EVCP_POI_Graph.PNG)
+
 Note: During the data collection a radius of 500m was defined.
 
 | variables         | description                                                                                 |
