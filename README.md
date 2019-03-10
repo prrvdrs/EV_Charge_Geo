@@ -9,7 +9,13 @@
 * http://www.cpinfo.ie/data/archive.html
 
 #### Places of interest - Google Places API (POI)
-* https://developers.google.com/places/web-service/search
+
+1. Login/create Google Cloud Platform account
+2. Create a dedicated project.
+3. Enable Places API. (Note: Requires billing to be enabled. Generally you can take advantage of $300 free credit to get started.)
+4. Create Credentials > API Key
+5. Store API Key within script/auth_example.json
+6. Run search_nearby_places_maps_API.py ([documentation](https://developers.google.com/places/web-service/search))
 
 ### Description
 

@@ -59,7 +59,7 @@ def main():
 
 def get_api_key():
     ''' Gets API key from a JSON file and returns it. '''
-    with open("auth.json", "r") as a:
+    with open("auth_example.json", "r") as a:
         data = json.load(a)
     return data["api_key"]
 
