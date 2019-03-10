@@ -50,7 +50,7 @@ Note: On a fast multi-standard charger you can only use one of the DC connectors
 | type_two          | List - [Place Type 2](https://developers.google.com/places/supported_types#table2) |
 | type              | List - Matching (O/1)|
 
-![graph](https://raw.githubusercontent.com/prrvdrs/evcp-poi/master/figures/graph.PNG)
+![graph](https://raw.githubusercontent.com/prrvdrs/evcp-poi/master/figures/EVCP_POI_Graph.PNG)
 
 
 ## Transformation
