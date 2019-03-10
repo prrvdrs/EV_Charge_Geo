@@ -54,3 +54,4 @@ Note: On a fast multi-standard charger you can only use one of the DC connectors
 
 
 
+
