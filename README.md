@@ -50,8 +50,7 @@ Note: On a fast multi-standard charger you can only use one of the DC connectors
 | type_two          | List - [Place Type 2](https://developers.google.com/places/supported_types#table2) |
 | type              | List - Matching (O/1)|
 
-```
-<Graph indexType="custom" height="400" width="400" nodes={[{options:{circleAttr:{radius:25},fixed:true},label:"EVCP",center:{x:274.8,y:156.1}},{options:{circleAttr:{radius:25},fixed:true},label:"PoI_0",center:{x:60.6,y:181.5}},{options:{circleAttr:{radius:25},fixed:true},label:"PoI_1",center:{x:359.6,y:327.8}},{options:{circleAttr:{radius:25},fixed:true},label:"PoI_2",center:{x:60.6,y:395.8}},{options:{circleAttr:{radius:25},fixed:true},label:"PoI_3",center:{x:138.2,y:60.6}},{options:{circleAttr:{radius:25},fixed:true},label:"PoI_4",center:{x:394.4,y:71.8}}]} edges={[{label:"200m",source:0,target:3},{label:"10m",source:0,target:5},{label:"12m",source:0,target:4},{label:"50m",source:0,target:2},{label:"49m",source:0,target:1}]} />
-```
+![graph](https://raw.githubusercontent.com/prrvdrs/evcp-poi/master/figures/graph.PNG)
+
 
 ## Transformation
