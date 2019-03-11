@@ -14,8 +14,8 @@
 4. Create Credentials > API Key
 5. Store API Key within script/auth_example.json
 6. Run search_nearby_places_maps_API.py ([documentation](https://developers.google.com/places/web-service/search))
-* 20 responses per request
-* Up to 60 total responses (using next_page_token)
+    * 20 responses per request
+    * Up to 60 total responses (using next_page_token)
 
 ## Data
 
