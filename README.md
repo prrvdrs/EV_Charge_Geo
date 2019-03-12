@@ -62,4 +62,7 @@ Note: During the data collection a radius of 500m was defined.
 | type_two          | List - [Place Type 2](https://developers.google.com/places/supported_types#table2)          |
 | type              | List - Matching (O/1)|
 
+
+![graph](https://raw.githubusercontent.com/prrvdrs/evcp-poi/master/figures/sample.PNG)
+
 ### Transformation
