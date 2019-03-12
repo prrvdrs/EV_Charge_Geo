@@ -13,7 +13,7 @@ import csv
 def main():
     searchApi = get_api_key()
     radius = "500"
-    with open('data/stage_evcp.csv') as coordinates:
+    with open('../data/stage_evcp.csv') as coordinates:
         reader = csv.reader(coordinates)
         for i in reader:
             c = ''.join(i)

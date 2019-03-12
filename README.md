@@ -66,3 +66,11 @@ Note: During the data collection a radius of 500m was defined.
 ![graph](https://raw.githubusercontent.com/prrvdrs/evcp-poi/master/figures/sample.PNG)
 
 ### Transformation
+
+
+* POI
+
+** Dimension Reduction for POI Types
+** etc
+
+* EVCP

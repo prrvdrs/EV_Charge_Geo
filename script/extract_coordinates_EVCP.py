@@ -1,6 +1,6 @@
 import pandas as pd
 
-df = pd.read_csv("data/data_evcptxt", delimiter= "\t", lineterminator="\n", encoding="latin-1",
+df = pd.read_csv("../data/data_evcptxt", delimiter= "\t", lineterminator="\n", encoding="latin-1",
                  names = ["Date", "Time", "ID", "Type", "Status", "KML_Coordinates", "Address", "Longitude", "Latitude"])
 
 '''

@@ -8,12 +8,11 @@ import time
 '''
 Create new file that will contain the parsed data
 '''
-
-csvfile = open('data/data_poi.csv', 'w')
+csvfile = open('../data/data_test_poi.csv', 'w')
 writer = csv.writer(csvfile, delimiter=',',lineterminator='\n',quotechar = '"')
-writer.writerow(["coordinates_cp","coordinates_pi","distance_vincenty","id","name", "place_id", "rating", "user_rating","scope", "vicinity",
-                 "type_raw", "type_one", "type_two",
-                 "type"])
+
+writer.writerow(["coordinates_cp","lat_cp","long_cp","coordinates_poi","lat_poi","long_poi","distance_vincenty","id","name", "place_id", "rating", "user_rating","scope", "vicinity",
+                 "type_raw", "type_one", "type_two","test"])
 
 directory = 'C:/Users/pierr/Documents/Projects/EV_Charge_Geo/data/API_Response'
 
@@ -25,7 +24,11 @@ for filename in os.listdir(directory):
             for i in data['results']:
                 filenameStage = re.search('(\d{1,2}\.\d+\-\d{1,2}\.\d+)', filename)
                 coordinatesCP = re.sub('-', ',-', filenameStage.group(0))
+                latCP = coordinatesCP.split(',')[0]
+                longCP = coordinatesCP.split(',')[1]
                 coordinatesPI = str(i['geometry']['location']['lat']) + ',' + str(i['geometry']['location']['lng'])
+                latPI = coordinatesPI.split(',')[0]
+                longPI = coordinatesPI.split(',')[1]
                 distanceVincenty = geopy.distance.vincenty(coordinatesCP, coordinatesPI).km
                 id = i['id']
                 name = i['name']
@@ -112,17 +115,15 @@ for filename in os.listdir(directory):
                 for q in set(typeRaw).intersection(set(googlePlacesTypeTwo)):
                     typeTwo.append(q)
                 typeThree = "placeholder"
+
                 labeling =[]
                 for g in set(googlePlacesType):
-                    for h in set(typeRaw):
-                        if g == h:
-                            x = 1
-                            break
-                        else:
-                            x = 0
+                    if g in typeRaw:
+                        x = "1"
+                    else:
+                        x = "0"
                     labeling.append(x)
-                writer.writerow([coordinatesCP, coordinatesPI, distanceVincenty, id, name, placeId, rating, userRating,
+                writer.writerow([coordinatesCP, latCP, longCP, coordinatesPI, latPI, longPI, distanceVincenty, id, name, placeId, rating, userRating,
                                  scope, vicinity, typeRaw, typeOne, typeTwo, labeling])
     else:
         continue
-    time.sleep(1)
