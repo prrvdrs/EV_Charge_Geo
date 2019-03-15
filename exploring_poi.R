@@ -19,7 +19,7 @@ test <- dplyr::filter(data, grepl('point_of_interest',type_raw))
 # https://dabblingwithdata.wordpress.com/2016/10/10/clustering-categorical-data-with-r/
 
 # Cluster
-cluster_results <-kmodes(test[,14:141], 12, iter.max = 10, weighted = FALSE )
+cluster_results <-kmodes(test[,14:141], 13, iter.max = 10, weighted = FALSE )
 cluster_results
 
 test2 <- #te<- select (data,-c(type_one))
