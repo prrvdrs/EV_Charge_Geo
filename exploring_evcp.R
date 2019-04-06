@@ -14,21 +14,38 @@ summary(data)
 
 # Handeling NA's:
 df <- na.omit(data) # Remove rows with missing ID, Types and Status
-df_1 <- df %>% group_by(Coordinates,ID) %>% count(name = "n", sort=T)
-plot(df_1$n)
+df_1 <- df %>% group_by(Coordinates) %>% count(name = "n", sort=T)
+plot(df_1$n, xlab = "Charging Station", ylab = "Status Count", main="Charging Station Coordinates")
 
-# Handeling the following situation:
+# Represnt 
+df_2 <- df %>% group_by(Coordinates, Type) %>% count(name = "n", sort=T)
+plot(df_2$n, xlab = "Charging Station", ylab = "Status Count", main="Charging Station Coordinates by Type")
+
+# Handeling the following situation: https://www.esb.ie/our-businesses/ecars/how-to-charge-your-ecar
 # Note- on a fast multi-standard charger you can only use one of the DC connectors (CHAdeMO and CCS)
 # at a time, however it is possible for the DC connector and fast AC connector to be used at the same time
-
-df_2 <- df %>% group_by(Coordinates, Type) %>% count(name = "n", sort=T)
-plot(df_2$n)
 
 # Example of fast multi-standard charger
 test <- df %>% filter(Coordinates == "51.877 , -8.3954") %>% group_by(Type) %>% count()
 test
 
-#df %>% filter(Coordinates == "51.877 , -8.3954")
+# But in general there is an imbalance between CHAdeMO and CCS
+table(df$Type) 
+
+# Try to indentify all the Type FastAC43 connector with CHAdeMO and CCS:
+df3 <- df %>% filter(Type == "FastAC43") %>% group_by(Coordinates, ID) %>% count(name = "n", sort=T)
+df3
+fast <- df3["ID"] # ID with FastAC43
+fast
+
+#df4 <- df %>% filter(ID = fast) %>% group_by(Coordinates, ID, Type) %>% count(name = "n", sort=T)
+
+
+# Example of fast multi-standard charger
+test <- df %>% filter(Coordinates == "51.877 , -8.3954") %>% group_by(Type) %>% count()
+test
+
+df %>% filter(Coordinates == "51.877 , -8.3954")
 
 # Next step: Handling Caveats
 
