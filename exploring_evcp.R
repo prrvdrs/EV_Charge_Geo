@@ -8,14 +8,27 @@ data <- read.csv("C:/Users/pierr/Documents/Projects/EV_Charge_Geo/data/data_evcp
 colnames(data) <- c("Date", "Time", "ID", "Type", "Status", "Coordinates", "Address", "Latitude", "Longitude")
 data <- data.frame(data)
 
-# Coordinates have the wrong format, rearranging the coorinates column
+str(data)
 data$Coordinates <- as.factor(paste(data$Longitude,',',data$Latitude))
-head(data)
-# Test: Randomly selected location on a single day for a fast multi-standard charger
-test <- data %>%
-        filter(ID == 'CP:C5HD3'& Date == '20181102')
-head(test)
+summary(data)
+
+# Handeling NA's:
+df <- na.omit(data) # Remove rows with missing ID, Types and Status
+df_1 <- df %>% group_by(Coordinates,ID) %>% count(name = "n", sort=T)
+plot(df_1$n)
+
+# Handeling the following situation:
+# Note- on a fast multi-standard charger you can only use one of the DC connectors (CHAdeMO and CCS)
+# at a time, however it is possible for the DC connector and fast AC connector to be used at the same time
+
+df_2 <- df %>% group_by(Coordinates, Type) %>% count(name = "n", sort=T)
+plot(df_2$n)
+
+# Example of fast multi-standard charger
+test <- df %>% filter(Coordinates == "51.877 , -8.3954") %>% group_by(Type) %>% count()
 test
+
+#df %>% filter(Coordinates == "51.877 , -8.3954")
 
 # Next step: Handling Caveats
 
