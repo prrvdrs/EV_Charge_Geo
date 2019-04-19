@@ -47,7 +47,9 @@ plot(stations$n) # A small number of stations are responsible for an importnat a
 
 # Hypothesis
 
-model_data <- data
+# Using a subset of the data
+
+model_data <- data %>% filter(grepl('2019', Year)) # Taking the last three month month only for now.
 
 table(model_data$Status) # Three types: Empty, Occ and Part. Handeling Part as Occ
 
@@ -84,15 +86,45 @@ index <- sample(1:dim(model_data_norm)[1], dim(model_data_norm )[1] * .75, repla
 training <- model_data_norm[index, ]
 testing <- model_data_norm[-index, ]
 
+# Bnchmark model:
+# Charging Stations are always empty.
+
 
 # Logit Model
 
-memory.limit()
-memory.limit(size=56000)
+# memory.limit()
+# memory.limit(size=56000)
 
-mylogit <- glm(Status ~ Hour + Weekday + County + Poi + Shopping, data = training, family = "binomial")
+mylogit <- glm(Status ~ Hour + Weekday + NewType + County + Poi + Shopping + Transport, data = training, family = "binomial")
 summary(mylogit)
 
 anova(mylogit, test="Chisq")
 
+fitted.results <- predict(mylogit,newdata=testing,type='response')
+fitted.results <- ifelse(fitted.results > 0.5,1,0)
+fitted.results <- factor(fitted.results)
+
+library(caret)
+cf <- confusionMatrix(fitted.results, testing$Status, positive = "1")
+cf
+
+
+# Accuracy : 0.7734
+# Kappa : 0.262  
+# Model is quite bad, the relativeljy high accurancy, is primarly due to the class imbalance between
+# Empty and Occupied. As highlighted by the Kappa, the model has almost none predictive power.
+
+
+library(C50)
+cFifty <- C5.0(Status ~ Hour + Weekday + NewType + County + Poi + Shopping + Transport, data=training, trials=10)
+plot(cFifty)
+summary(cFifty) 
+
+library(caret)
+c <- predict(cFifty, testing[, -6])
+caret::confusionMatrix(c, testing$Status, positive="1")
+
+# Accuracy : 0.8081
+# Kappa : 0.4137  
+# Accuracy improved, but most imprtantly, kappa has largely improved, but is still quite low.
 
