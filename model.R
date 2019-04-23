@@ -51,11 +51,13 @@ plot(stations$n) # A small number of stations are responsible for an importnat a
 
 ##################################################
 
-# Hypothesis
+# Hypothesis only Modleing Cuunty Dublin March 2019 (due to computational limiation)
 
 # Using a subset of the data
 
-model_data <- data %>% filter(Year == '2019') %>% filter(Month == 'March')
+model_data <- data %>% filter(Year == '2019') %>% filter(Month == 'March') %>% filter(County =="County Dublin")
+
+write.csv(model_data, file = "evcp_main_subset_dublin.csv")
 
 table(model_data$Status) # Three types: Empty, Occ and Part. Handeling Part as Occ
 
@@ -63,12 +65,32 @@ model_data$Status <- ifelse(grepl("Occ", model_data$Status), "Occ",
                             ifelse(grepl("Part", model_data$Status), "Occ",
                                    "Empty"))
 
+
+occupied <- model_data %>% filter(Status != "Empty") %>% group_by(Hour,.drop = FALSE) %>% tally()
+plot(occupied$n,main = "County Dublin March 2019", xlab =" Hour of the Day", ylab = "Occurence")
+
+empty <- model_data%>% filter(Status == "Empty") %>% group_by(Hour,.drop = FALSE) %>% tally()
+plot(empty$n,main = "All empty occurencies by hour of the day", xlab =" Hour of the Day", ylab = "Occurence")
+
+all_hours <- model_data %>% group_by(Hour,.drop = FALSE) %>% tally() #Used to calculate %
+
+
+occupation_rate <- occupied$n / all_hours$n
+barplot(occupation_rate,
+        main = "County Dublin Occupation Rate - March 2019",
+        xlab =" Hour of the Day",
+        ylab = "Occupation rate",
+        names.arg=c("0", "1" , "2","3", "4", "5", "6" , "7","8", "9", "10", "11", 
+                    "12", "13" , "14","15", "16", "17", "18" , "19","20", "21", "22", "23" ))
+
+
 model_data$Status <- factor(model_data$Status, levels = c("Empty","Occ"), labels = c("0",	"1"))
 table(model_data$Status)
 
-
 model_data <- data.frame(model_data)
 
+model_data <- model_data[, -13] # Remove Year
+model_data <- model_data[, -12] # Remove Year
 model_data <- model_data[, -11] # Remove Year
 model_data <- model_data[, -10] # Remove Address
 model_data <- model_data[, -7] # Remove Address
@@ -126,18 +148,15 @@ varImpPlotData <- varImpPlot(rf)
 library(caret)
 
 rf_predict <- predict(rf, testing[, -2])
+rf_predict1 <- predict(rf, testing[, -2], type="prob")
+
 caret::confusionMatrix(rf_predict, testing$Status, positive="1")
+
 
 # Accuracy : 0.8177
 # Kappa : 0.4814 
 
-# Trying to plot ROC graph
-# library(pROC)
-
-#rf_response_scores <- predict(rf, testing, type="response")
-# plot(roc(testing$Status, rf_predict, direction="<"),
-#     col="yellow", lwd=3, main="The turtle finds its way")
-
+roc(testingN$Status, rf_predict1[,2], plot=TRUE)
 
 # # # # # # # # # # # # # # 
 #       Logit Model       #
@@ -150,19 +169,28 @@ summary(mylogit)
 anova(mylogit, test="Chisq")
 
 fitted.results <- predict(mylogit,newdata=testingN,type='response')
-fitted.results <- ifelse(fitted.results > 0.5,1,0)
-fitted.results <- factor(fitted.results)
+fitted.results_conf <- ifelse(fitted.results > 0.5,1,0)
+fitted.results_conf <- factor(fitted.results)
 
 library(caret)
-cf <- confusionMatrix(fitted.results, testingN$Status, positive = "1")
+cf <- confusionMatrix(fitted.results_conf, testingN$Status, positive = "1")
 cf
 
-
-# Accuracy : 0.7734
-# Kappa : 0.262  
+# Accuracy : 0.711
+# Kappa : 0.407 
 # Model is quite bad, the relativeljy high accurancy, is primarly due to the class imbalance between
 # Empty and Occupied. As highlighted by the Kappa, the model has almost none predictive power.
 
+library(ggplot2)
+library(pROC)
+?roc
+logit <- roc(testingN$Status, fitted.results)
+rf <- roc(testingN$Status, rf_predict1[,2])
+
+#rocobj1 <- roc(df$actualoutcome1, data$prediction1)
+#rocobj2 <- roc(df$actualoutcome1, data$prediction2)
+
+ggroc(list(Logit = logit, Random_Forest = rf))
 
 # # # # # # # # # # # # # # 
 #           C50           #
@@ -176,12 +204,26 @@ cFifty <- C5.0(Status ~ ., data=trainingN, trials=10)
 
 library(caret)
 c <- predict(cFifty, testingN[, -2])
+c1 <- predict(cFifty , testingN[, -2], type="prob")
+c1
+?predict
 caret::confusionMatrix(c, testingN$Status, positive="1")
 
 # Accuracy : 0.8081
 # Kappa : 0.4137  
 # Accuracy improved, but most imprtantly, kappa has largely improved, but is still quite low.
 
+library(pROC)
+
+
+library(ggplot2)
+library(pROC)
+?roc
+logit <- roc(testingN$Status, fitted.results)
+rf <- roc(testingN$Status, rf_predict1[,2])
+c50roc <- roc(testingN$Status, c1[,2])
+
+ggroc(list(Logit = logit, Random_Forest = rf, C50 = c50roc))
 
 ###### Winnowing
 
@@ -203,7 +245,19 @@ tuneParams <- trainControl(
 
 c50Tree <- train(trainingN[,-c(2)], trainingN$Status, method="C5.0", trControl=tuneParams, tuneLength=3)
 c50.pred <- predict(c50Tree, newdata = testingN[,-c(2)])
+c50.pred1 <- predict(c50Tree, newdata = testingN[,-c(2)], type="prob")
 confusionMatrix(c50.pred, testingN$Status,  positive="1")
+
+# Accuracy : 0.7776   
+# Kappa : 0.542 
+
+logit <- roc(testingN$Status, fitted.results)
+rf <- roc(testingN$Status, rf_predict1[,2])
+c50roc <- roc(testingN$Status, c1[,2])
+c50tuningroc <- roc(testingN$Status, c50.pred1[,2])
+
+ggroc(list(Logit = logit, Random_Forest = rf, C50 = c50roc, C50_Tuning = c50tuningroc))
+
 
 
 ########## KNN ###############
@@ -222,71 +276,3 @@ kNNtraining <- model_kNN[kNNindex, ]
 kNNtesting <- model_kNN[-kNNindex, ]
 statusTraining <- Status[kNNindex]
 statusTesting <- Status[-kNNindex]
-
-# Let’s choose some values of k:
-k1 <- round(sqrt(dim(training)[1])) #sqrt of number of instances
-k2 <- round(sqrt(dim(training)[2])) #sqrt of number of attributes
-k3 <- 7 #a number between 3 and 10
-# Feel free to add in more too! Now, run kNN:
-
-library(class)
-#knn1 <- knn(train = kNNtraining, test = kNNtesting, cl = statusTraining, k=k1)
-knn2 <- knn(train = kNNtraining, test = kNNtesting, cl = statusTraining, k=k2)
-knn3 <- knn(train = kNNtraining, test = kNNtesting, cl = statusTraining, k=k3)
-
-#auc(survivedTest, knn1)
-auc(survivedTest, knn2)
-auc(survivedTest, knn3)
-# Differences may also be due to sampling, hence doing Cross validation, andtaking the average auc.
-
-library(ModelMetrics)
-library(class)
-# Cross-validation
-folds <- createFolds(Survived, k = 10) # Train the model multiple time, on different training and testing data. 10 is a best practice.
-cv_results <- lapply(folds, function(x) {
-  knn_train <- tkNN[x, ]
-  knn_test <- tkNN[-x, ]
-  survivedTrain <- Survived[x]
-  survivedTest <- Survived[-x]
-  knn_model <- knn(train = knn_train, test = knn_test, cl = survivedTrain, k=3)
-  a <- auc(survivedTest, knn_model)
-  return(a)
-})
-auroc <- unlist(cv_results)
-summary(auroc)
-# Take the mean
-
-# mean auc k1 0.6933
-# mean auc k2 0.7624
-# mean auc k3 0.7531
-
-#############################################
-# define training control parameters        #
-# find bes k in terms of Accuracy and Kappa
-
-# https://machinelearningmastery.com/how-to-estimate-model-accuracy-in-r-using-the-caret-package/
-train_control <- trainControl(method="cv", number=10) # cv is cross-validation
-model <- train(y=Survived, x=tkNN, trControl=train_control, method="knn")
-print(model)
-
-# Task 6:
-
-# Find best k in terms of AUROC
-perf <- c()
-folds <- createFolds(Survived, k = 10)
-for (i in 1:30) {
-  cv_results <- lapply(folds, function(x) {
-    knn_train <- tkNN[x, ]
-    knn_test <- tkNN[-x, ]
-    survivedTrain <- Survived[x]
-    survivedTest <- Survived[-x]
-    knn_model <- knn(train = knn_train, test = knn_test, cl = survivedTrain, k=i)
-    a <- auc(survivedTest, knn_model)
-    return(a)
-  })
-  perf[i] <- mean(unlist(cv_results))
-}
-plot(perf, xlab="k", ylab="AUROC")
-
-
-
